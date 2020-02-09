@@ -12,7 +12,44 @@
 #include "HCTree.hpp"
 /* TODO: add pseudo compression with ascii encoding and naive header
  * (checkpoint) */
-void pseudoCompression(string inFileName, string outFileName) {}
+void pseudoCompression(string inFileName, string outFileName) {
+    // 1. scan the input file, to compute each ascii value's count into freqency
+    // vector
+    HCTree* tree = new HCTree();
+    ifstream fin;
+    ofstream fout;
+    char c;
+    int num_row = 0;
+    vector<unsigned int> frequency(256);
+    fin.open(inFileName, ios::in);
+    while (!fin.eof()) {
+        fin.get(c);
+        frequency.at(c)++;
+        if (c == '\n') num_row++;
+    }
+    fin.close();
+    //接下来把frequency的每个index的值写进output file的1-256行
+    fout.open(outFileName, ios::out);
+    for (int i = 0; i < frequency.size(); i++) {
+        fout << (unsigned char)frequency.at(i) << endl;
+    }
+    fout.close();
+
+    // 2.当读取完第一遍file,将frequency vector存好后，call build()
+    tree->build(frequency);
+    // 3.当build好tree之后，再次scan一遍file, 然后每读到一个char, call encode()
+    // to encode each char into encoding bits.
+    fin.open(inFileName, ios::in);
+
+    fout.open(outFileName, ios::out);
+    while (!fin.eof()) {
+        fin.get(c);
+        tree->encode(c, fout);
+        if (c == '\n') num_row++;
+    }
+    fin.close();
+    fout.close();
+}
 
 /* TODO: True compression with bitwise i/o and small header (final) */
 void trueCompression(string inFileName, string outFileName) {}
@@ -34,12 +71,22 @@ int main(int argc, char* argv[]) {
 
     options.parse_positional({"input", "output"});
     auto userOptions = options.parse(argc, argv);
-
+    // when the inputfile is not valid, print help(does it include empty file
+    // case)
     if (userOptions.count("help") || !FileUtils::isValidFile(inFileName) ||
         outFileName.empty()) {
         cout << options.help({""}) << std::endl;
         exit(0);
     }
+    // check if the file is empty, if it's empty, do
+    // we need to return an empty output file, or exit(0)?
+    if (FileUtils::isEmptyFile(inFileName)) {
+        ofstream fout;
+        fout.open(outFileName, ios::out);
+        fout.close();
+    }
 
+    // call pseudoCompression() to implement encoding part
+    pseudoCompression(inFileName, outFileName);
     return 0;
 }
