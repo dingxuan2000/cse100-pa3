@@ -7,6 +7,7 @@
 #define HCTREE_HPP
 
 #include <fstream>
+#include <map>
 #include <queue>
 #include <vector>
 // #include "BitInputStream.hpp"
@@ -18,12 +19,14 @@ using namespace std;
 /** TODO: class header */
 class HCTree {
   private:
-    HCNode* root;            // the root of HCTree
+    // HCNode* root;            // the root of HCTree
     vector<HCNode*> leaves;  // a vector storing pointers to all leaf HCNodes
+    typedef priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
 
   public:
     /* TODO: add function header and implement */
-    HCTree() {}
+    HCNode* root;
+    HCTree() : root(0) {}
 
     /* TODO: add function header */
     ~HCTree();
