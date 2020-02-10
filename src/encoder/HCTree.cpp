@@ -72,16 +72,16 @@ void HCTree::encode(byte symbol, ostream& out) const {
         out << "0";
     else {
         HCNode* ptr = leaves.at(symbol);
-        string en_string = "";
-        encodeString(ptr, en_string);
-        out << en_string;
+        // string en_string;
+        // en_string = encodeString(ptr, "");
+        out << encodeString(ptr, "");
     }
 }
-void HCTree::encodeString(HCNode* ptr, const string& str) const {
-    if (ptr == nullptr) return;
-    if (ptr->p == nullptr) return;
-    if (ptr == ptr->p->c0) encodeString(ptr->p, str + "0");
-    if (ptr == ptr->p->c1) encodeString(ptr->p, str + "1");
+string HCTree::encodeString(HCNode* ptr, const string& str) const {
+    if (ptr == nullptr) return str;
+    if (ptr->p == nullptr) return str;
+    if (ptr == ptr->p->c0) return encodeString(ptr->p, str + "0");
+    if (ptr == ptr->p->c1) return encodeString(ptr->p, str + "1");
 }
 
 /* TODO */

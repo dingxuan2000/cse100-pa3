@@ -23,7 +23,7 @@ class HCTree {
     // HCNode* root;            // the root of HCTree
     // vector<HCNode*> leaves;  // a vector storing pointers to all leaf HCNodes
     // typedef priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
-    void encodeString(HCNode* ptr, const string& str) const;
+    string encodeString(HCNode* ptr, const string& str) const;
 
   public:
     /* TODO: add function header and implement */
