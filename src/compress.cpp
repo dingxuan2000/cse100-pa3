@@ -19,19 +19,25 @@ void pseudoCompression(string inFileName, string outFileName) {
     ifstream fin;
     ofstream fout;
     char c;
-    int num_row = 0;
+    // int num_row = 0;
     vector<unsigned int> frequency(256);
     fin.open(inFileName, ios::in);
-    while (!fin.eof()) {
+    while (!fin.eof() && fin.peek() != EOF) {
+        // c = fin.peek();
         fin.get(c);
-        frequency.at(c)++;
-        if (c == '\n') num_row++;
+        // cout << c << endl;
+        if (c == '\n') {
+            frequency.at((unsigned int)c)++;
+            continue;
+        } else
+            frequency.at((unsigned int)c)++;
     }
     fin.close();
     //接下来把frequency的每个index的值写进output file的1-256行
     fout.open(outFileName, ios::out);
     for (int i = 0; i < frequency.size(); i++) {
-        fout << (unsigned char)frequency.at(i) << endl;
+        // cout << frequency.at(i) << endl; //here,it's correct
+        fout << frequency.at(i) << endl;
     }
     fout.close();
 
@@ -39,13 +45,13 @@ void pseudoCompression(string inFileName, string outFileName) {
     tree->build(frequency);
     // 3.当build好tree之后，再次scan一遍file, 然后每读到一个char, call encode()
     // to encode each char into encoding bits.
-    fin.open(inFileName, ios::in);
+    fin.open(inFileName, ios_base::app);
 
-    fout.open(outFileName, ios::out);
-    while (!fin.eof()) {
+    fout.open(outFileName, ios_base::app);
+    while (!fin.eof() && fin.peek() != EOF) {
+        // c = fin.peek();
         fin.get(c);
         tree->encode(c, fout);
-        if (c == '\n') num_row++;
     }
     fin.close();
     fout.close();
@@ -83,7 +89,9 @@ int main(int argc, char* argv[]) {
     if (FileUtils::isEmptyFile(inFileName)) {
         ofstream fout;
         fout.open(outFileName, ios::out);
+        fout << "";
         fout.close();
+        return 0;
     }
 
     // call pseudoCompression() to implement encoding part

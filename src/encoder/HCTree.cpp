@@ -48,7 +48,7 @@ void HCTree::build(const vector<unsigned int>& freqs) {
         HCNode* new_parent = new HCNode(c0ptr->count + c1ptr->count,
                                         c0ptr->symbol, c0ptr, c1ptr, 0);
         c0ptr->p = new_parent;
-        c0ptr->p = new_parent;
+        c1ptr->p = new_parent;
         queue.push(new_parent);
     }
     this->root = queue.top();
@@ -80,12 +80,23 @@ void HCTree::encode(byte symbol, ostream& out) const {
 string HCTree::encodeString(HCNode* ptr, const string& str) const {
     if (ptr == nullptr) return str;
     if (ptr->p == nullptr) return str;
-    if (ptr == ptr->p->c0) return encodeString(ptr->p, str + "0");
-    if (ptr == ptr->p->c1) return encodeString(ptr->p, str + "1");
+    if (ptr == ptr->p->c0) return encodeString(ptr->p, "0" + str);
+    if (ptr == ptr->p->c1) return encodeString(ptr->p, "1" + str);
 }
 
 /* TODO */
 // byte HCTree::decode(BitInputStream& in) const { return ' '; }
 
-/* TODO */
-byte HCTree::decode(istream& in) const { return ' '; }
+/* TODO
+ * pass in each encoding bits, and decode into the corresponding symbol
+ */
+byte HCTree::decode(istream& in) const {
+    HCNode* ptr = this->root;
+    char c = ' ';
+    if (ptr == nullptr) return ' ';
+    while (in.get(c) && ptr != 0) {
+        if (c == '1') ptr = ptr->c1;
+        if (c == '0') ptr = ptr->c0;
+    }
+    return ptr->symbol;
+}
