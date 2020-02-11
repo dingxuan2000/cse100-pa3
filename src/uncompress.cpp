@@ -30,8 +30,8 @@ void pseudoDecompression(string inFileName, string outFileName) {
         // convert string into int
         stringstream geek(c);
         geek >> freq;
+        // cout << freq << endl;
 
-        // cout << c << endl;
         frequency.at(num_row - 1) = freq;
 
         num_row++;
@@ -41,16 +41,25 @@ void pseudoDecompression(string inFileName, string outFileName) {
     //接下来call build() to construct HCTree
     tree->build(frequency);
     //接下来从257行到end of file去不断地call decode()
-    std::stringstream input;  // create an istream object
+    stringstream input;  // create an istream object
     string content;
-    fin.open(inFileName, ios_base::app);
-    fout.open(outFileName, ios_base::app);
+    fin.open(inFileName, ios_base::app | ios::in);
+    fout.open(outFileName, ios::out);
 
-    content.assign(istreambuf_iterator<char>(fin), istreambuf_iterator<char>());
-    input << content;
+    // content.assign(istreambuf_iterator<char>(fin),
+    // istreambuf_iterator<char>());
+
+    while (!fin.eof() && fin.peek() != EOF) {
+        getline(fin, content, '\n');
+        content += content;
+    }
+    input >> content;
+    // check content string
+    // cout << input << endl;
     byte symbol;
     while (!fin.eof() && fin.peek() != EOF) {
         symbol = tree->decode(input);
+        // cout << tree->decode(fin) << endl;
         fout << symbol;
     }
     fin.close();

@@ -51,14 +51,14 @@ class SimpleHCTreeFixture : public ::testing::Test {
 //     cout << tree.root->c1->c0->c1->count << endl;
 //     // ASSERT_EQ(tree.root, parent);
 // }
-TEST_F(SimpleHCTreeFixture, TEST_ENCODE) {
-    ostringstream os;
-    tree.encode('o', os);
-    cout << os.str() << endl;
-    // ASSERT_EQ(os.str(), "0");
-}
-
-// TEST_F(SimpleHCTreeFixture, TEST_DECODE) {
-//     istringstream is("1");
-//     ASSERT_EQ(tree.decode(is), 'b');
+// TEST_F(SimpleHCTreeFixture, TEST_ENCODE) {
+//     ostringstream os;
+//     tree.encode('o', os);
+//     cout << os.str() << endl;
+//     // ASSERT_EQ(os.str(), "0");
 // }
+
+TEST_F(SimpleHCTreeFixture, TEST_DECODE) {
+    istringstream is("100");
+    ASSERT_EQ(tree.decode(is), 'h');
+}
