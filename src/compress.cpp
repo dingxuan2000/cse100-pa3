@@ -28,7 +28,7 @@ void pseudoCompression(string inFileName, string outFileName) {
         // cout << c << endl;
         if (c == '\n') {
             frequency.at((unsigned int)c)++;
-            continue;
+            // continue;
         } else
             frequency.at((unsigned int)c)++;
     }
@@ -55,7 +55,7 @@ void pseudoCompression(string inFileName, string outFileName) {
     }
     fin.close();
     fout.close();
-    delete tree;
+    delete tree->root;
 }
 
 /* TODO: True compression with bitwise i/o and small header (final) */

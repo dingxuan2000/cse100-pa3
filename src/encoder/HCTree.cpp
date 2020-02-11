@@ -103,13 +103,17 @@ byte HCTree::decode(istream& in) const {
     char c = ' ';
     if (ptr == nullptr) return 0;
     // if only one node in the tree, just return the root's symbol
-    //这个情况有问题，跑的时候一直停不下来
-    if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
-    while (in.get(c)) {
-        if (c == '1') ptr = ptr->c1;
-        if (c == '0') ptr = ptr->c0;
-        // when reached leaf node
-        if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
+    if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
+        in.get(c);
+        return ptr->symbol;
+    } else {
+        while (in.get(c)) {
+            // if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
+            if (c == '1') ptr = ptr->c1;
+            if (c == '0') ptr = ptr->c0;
+            // when reached leaf node
+            if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
+        }
     }
 }
 void HCTree::deleteAll(HCNode* n) {
