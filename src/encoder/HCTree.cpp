@@ -7,11 +7,11 @@
 
 /* TODO */
 HCTree::~HCTree() {
-    delete this->root;
+    deleteAll(this->root);
     // leaves.clear();
-    for (auto p : leaves) {
-        delete p;
-    }
+    // for (auto p : leaves) {
+    //     delete p;
+    // }
     // leaves.clear();
 }
 
@@ -46,6 +46,7 @@ void HCTree::build(const vector<unsigned int>& freqs) {
     // 1. 最小的count的node会被先pop出来，就是pq需要先pop出两个node,
     // 先pop出来的第一个node是c0, 第二个是c1，然后这两个node的parent将会被create
     // a newNode, symbol是c0's symbol, count是 两个孩子的count sum.
+
     while (queue.size() != 1) {  // how to check queue has at least two HCNodes?
 
         c0ptr = queue.top();
@@ -101,6 +102,9 @@ byte HCTree::decode(istream& in) const {
     HCNode* ptr = this->root;
     char c = ' ';
     if (ptr == nullptr) return 0;
+    // if only one node in the tree, just return the root's symbol
+    //这个情况有问题，跑的时候一直停不下来
+    if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
     while (in.get(c)) {
         if (c == '1') ptr = ptr->c1;
         if (c == '0') ptr = ptr->c0;
@@ -108,9 +112,9 @@ byte HCTree::decode(istream& in) const {
         if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
     }
 }
-// void HCTree::deleteAll(HCNode* n) {
-//     if (n == 0) return;
-//     deleteAll(n->c0);
-//     deleteAll(n->c1);
-//     delete n;
-// }
+void HCTree::deleteAll(HCNode* n) {
+    if (n == 0) return;
+    deleteAll(n->c0);
+    deleteAll(n->c1);
+    delete n;
+}

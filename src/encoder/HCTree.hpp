@@ -24,7 +24,7 @@ class HCTree {
     // vector<HCNode*> leaves;  // a vector storing pointers to all leaf HCNodes
     // typedef priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
     string encodeString(HCNode* ptr, const string& str) const;
-    // void HCTree::deleteAll(HCNode* n);
+    void deleteAll(HCNode* n);
 
   public:
     /* TODO: add function header and implement */

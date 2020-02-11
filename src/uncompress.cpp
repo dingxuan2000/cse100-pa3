@@ -59,7 +59,7 @@ void pseudoDecompression(string inFileName, string outFileName) {
     byte symbol;
     while (!fin.eof() && fin.peek() != EOF) {
         symbol = tree->decode(fin);
-        // cout << symbol << endl;
+        cout << symbol << endl;
         fout << symbol;
     }
     fin.close();
