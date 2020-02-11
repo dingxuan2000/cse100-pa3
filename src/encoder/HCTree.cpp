@@ -6,7 +6,14 @@
 #include "HCTree.hpp"
 
 /* TODO */
-HCTree::~HCTree() {}
+HCTree::~HCTree() {
+    delete this->root;
+    // leaves.clear();
+    for (auto p : leaves) {
+        delete p;
+    }
+    // leaves.clear();
+}
 
 /* TODO
  * Build the HCTree from the given frequency vector.
@@ -93,10 +100,17 @@ string HCTree::encodeString(HCNode* ptr, const string& str) const {
 byte HCTree::decode(istream& in) const {
     HCNode* ptr = this->root;
     char c = ' ';
-    if (ptr == nullptr) return ' ';
-    while (in.get(c) && ptr != 0) {
+    if (ptr == nullptr) return 0;
+    while (in.get(c)) {
         if (c == '1') ptr = ptr->c1;
         if (c == '0') ptr = ptr->c0;
+        // when reached leaf node
+        if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
     }
-    return ptr->symbol;
 }
+// void HCTree::deleteAll(HCNode* n) {
+//     if (n == 0) return;
+//     deleteAll(n->c0);
+//     deleteAll(n->c1);
+//     delete n;
+// }

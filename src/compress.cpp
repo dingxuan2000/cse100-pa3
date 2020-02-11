@@ -55,6 +55,7 @@ void pseudoCompression(string inFileName, string outFileName) {
     }
     fin.close();
     fout.close();
+    delete tree;
 }
 
 /* TODO: True compression with bitwise i/o and small header (final) */

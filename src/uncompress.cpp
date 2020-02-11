@@ -36,34 +36,35 @@ void pseudoDecompression(string inFileName, string outFileName) {
 
         num_row++;
     }
-    fin.close();
+    // fin.close();
 
     //接下来call build() to construct HCTree
     tree->build(frequency);
     //接下来从257行到end of file去不断地call decode()
-    stringstream input;  // create an istream object
+    // stringstream input;  // create an istream object
     string content;
-    fin.open(inFileName, ios_base::app | ios::in);
+    // fin.open(inFileName, ios_base::app | ios::in);
     fout.open(outFileName, ios::out);
 
     // content.assign(istreambuf_iterator<char>(fin),
     // istreambuf_iterator<char>());
 
-    while (!fin.eof() && fin.peek() != EOF) {
-        getline(fin, content, '\n');
-        content += content;
-    }
-    input >> content;
+    // while (!fin.eof() && fin.peek() != EOF) {
+    //     getline(fin, content, '\n');
+    //     content += content;
+    // }
+    // fin >> content;
     // check content string
     // cout << input << endl;
     byte symbol;
     while (!fin.eof() && fin.peek() != EOF) {
-        symbol = tree->decode(input);
-        // cout << tree->decode(fin) << endl;
+        symbol = tree->decode(fin);
+        // cout << symbol << endl;
         fout << symbol;
     }
     fin.close();
     fout.close();
+    delete tree;
 }
 
 /* TODO: True decompression with bitwise i/o and small header (final) */
@@ -105,5 +106,6 @@ int main(int argc, char* argv[]) {
 
     // call pseudoCompression() to implement encoding part
     pseudoDecompression(inFileName, outFileName);
+
     return 0;
 }
