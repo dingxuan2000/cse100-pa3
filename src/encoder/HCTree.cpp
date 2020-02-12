@@ -9,10 +9,10 @@
 HCTree::~HCTree() {
     deleteAll(this->root);
     // leaves.clear();
-    // for (int i = 0; i < (this->leaves.size()); i++) {
-    //     delete this->leaves[i];
+    // for (int i = 0; i < (leaves.size()); i++) {
+    //     delete leaves.at(i);
     // }
-    // this->leaves.clear();
+    this->leaves.clear();
 }
 
 /* TODO
