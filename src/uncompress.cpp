@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
     if (userOptions.count("help") || !FileUtils::isValidFile(inFileName) ||
         outFileName.empty()) {
         cout << options.help({""}) << std::endl;
-        exit(0);
+        return 0;
     }
     // check if the file is empty, if it's empty, do
     // we need to return an empty output file, or exit(0)?
