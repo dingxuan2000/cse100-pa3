@@ -9,7 +9,11 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/${relativeFile}.executable",
-            "args": [],
+            "args": [
+                "--ascii",
+                "data/exceed127.txt",
+                "exceed127_my.txt"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -18,19 +18,21 @@ void pseudoCompression(string inFileName, string outFileName) {
     HCTree* tree = new HCTree();
     ifstream fin;
     ofstream fout;
-    char c;
+    byte c1;
     // int num_row = 0;
     vector<unsigned int> frequency(256);
     fin.open(inFileName, ios::in);
     while (!fin.eof() && fin.peek() != EOF) {
         // c = fin.peek();
-        fin.get(c);
+        c1 = (byte)fin.get();
         // cout << c << endl;
-        if (c == '\n') {
-            frequency.at((unsigned int)c)++;
+        if (c1 == '\n') {
+            frequency[c1]++;
             // continue;
-        } else
-            frequency.at((unsigned int)c)++;
+        } else {
+            // cout << c1 << endl;
+            frequency[c1]++;
+        }
     }
     fin.close();
     //接下来把frequency的每个index的值写进output file的1-256行
@@ -50,8 +52,8 @@ void pseudoCompression(string inFileName, string outFileName) {
     fout.open(outFileName, ios_base::app);
     while (!fin.eof() && fin.peek() != EOF) {
         // c = fin.peek();
-        fin.get(c);
-        tree->encode(c, fout);
+        c1 = (byte)fin.get();
+        tree->encode(c1, fout);
     }
     fin.close();
     fout.close();
