@@ -1,7 +1,12 @@
 /**
  * TODO: file header
  *
- * Author:
+ * Author:Xuan Ding, xding@ucsd.edu
+ *        Qilong Li, qil009@ucsd.edu
+ * this file decodes an encoded file as input and outputs original content into
+ * an output file.this file includes function
+ * psudouncompress which takes parameter of two file names inputfile and
+ * outputfile. inputs encoded file and outputs original file.
  */
 
 #include <fstream>
@@ -13,9 +18,11 @@
 #include "HCTree.hpp"
 
 /* TODO: Pseudo decompression with ascii encoding and naive header (checkpoint)
+ * psudouncompress which takes parameter of two file names inputfile and
+ * outputfile. inputs encoded file and outputs original file.
  */
 void pseudoDecompression(string inFileName, string outFileName) {
-    // 1. 首先read the input file, 将1-256行的每一行的数字存进frequency vectors,
+    // 1. Read the input file, put 1-125 line's numbers into frequency vector
     // then, build the Huffman coding tree
     HCTree* tree = new HCTree();
     ifstream fin;
@@ -35,12 +42,10 @@ void pseudoDecompression(string inFileName, string outFileName) {
         num_row++;
     }
 
-    //接下来call build() to construct HCTree
+    // then, call build() to construct HCTree
     tree->build(frequency);
-    //接下来从257行到end of file去不断地call decode()
-    // stringstream input;  // create an istream object
+    // then, call decode() from 257 line until hit the end of file
     string content;
-    // fin.open(inFileName, ios_base::app | ios::in);
     fout.open(outFileName, ios::out);
 
     byte symbol;

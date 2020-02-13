@@ -1,7 +1,12 @@
 /**
  * TODO: file header
  *
- * Author:
+ * Author:Xuan Ding, xding@ucsd.edu
+ *        Qilong Li, qil009@ucsd.edu
+ * HCTree class provides the build() to build the HCTree from the given
+ * frequency vector. and use encode() and decode() to compress and decompress
+ * the input file. Implemented HCTree.hpp.
+ *
  */
 #include "HCTree.hpp"
 
@@ -16,20 +21,24 @@ HCTree::~HCTree() {
 }
 
 /* TODO
- * Build the HCTree from the given frequency vector.
- * 需要把每一个HCNode* 放进leaves vector里面，再讲每个vector放进pq里面，
+ * Parameter: frequency vector with unsigned int
+ * this function takes the frequency vector to build the HCTree, using the
+ * ascii value and its corresponding frequency in the frequency vector to
+ * build the HCTree. Using a "leaves" vector to store each HCNode pointer, and
+ * using priority_queue to help build the HCTree from bottom to up with Huffman
+ * algorithm.
  */
 void HCTree::build(const vector<unsigned int>& freqs) {
-    //这个vector.size是256, index from 0 to 255. 每一个index里存的是每个ascill
-    // value的frequecy，首先给每个non-freq 的ascill value create HCNode,
-    // 然后create一个后，立马放进pq里面
+    // this vector size is 256, index from 0 to 255. Each index stores each
+    // ascii value's frequency.
+    // First, create a HCNode pointer for each non-freq, then put in the pq
+    // after creating each node.
     pq queue;
     HCNode* c0ptr;
     HCNode* c1ptr;
     HCNode* pptr;
-    // leaves = vector<HCNode*>(256, (HCNode*)0);
     for (int i = 0; i < freqs.size(); i++) {
-        //如果freq不是0，create a new HCNode with symbol and count
+        // if freq is not 0, create a new HCNode with symbol and count
         if (freqs.at(i) != 0) {
             HCNode* newNode = new HCNode(freqs.at(i), (byte)i, 0, 0, 0);
             leaves.push_back(newNode);
@@ -43,10 +52,10 @@ void HCTree::build(const vector<unsigned int>& freqs) {
         if (leaves.at(i) != nullptr) queue.push(leaves.at(i));
     }
     // next, build the HCTree:
-    // 1. 最小的count的node会被先pop出来，就是pq需要先pop出两个node,
-    // 先pop出来的第一个node是c0, 第二个是c1，然后这两个node的parent将会被create
-    // a newNode, symbol是c0's symbol, count是 两个孩子的count sum.
-
+    // 1. the smallest count of the node will be poped first, so pq needs to pop
+    // the first two nodes, the first to be poped node will be c0, the latter
+    // poped one will be c1. Then create a parent node(symbol is c0's symbol,
+    // count is the the sum of two children's counts.)
     while (queue.size() != 1) {  // how to check queue has at least two HCNodes?
 
         c0ptr = queue.top();
@@ -68,14 +77,15 @@ void HCTree::build(const vector<unsigned int>& freqs) {
 // void HCTree::encode(byte symbol, BitOutputStream& out) const {}
 
 /* TODO
- * byte 就是unsigned char,
- * 根据leaves vector, we can determine the symbol node in the tree.
- * Then traverse its parent until hit the root
+ * byte is unsigned char,
+ * According to leaves vector, we can determine the symbol node in the tree.
+ * Then traverse its parent until hit the root. Then we can get the encoding
+ * bits for this symbol.
  */
 void HCTree::encode(byte symbol, ostream& out) const {
     // if the tree is empty, means the inputfile is also empty
     // if only one node in the tree, means root node has no c0 and c1
-    // if (symbol == '\n') out << "" << endl;
+
     if ((this->root->c0 == nullptr) && (this->root->c1 == nullptr))
         out << "0";
     else {
@@ -95,18 +105,14 @@ void HCTree::encode(byte symbol, ostream& out) const {
         out << en_string;
     }
 }
-// string HCTree::encodeString(HCNode* ptr, const string& str) const {
-//     if (ptr == nullptr) return str;
-//     if (ptr->p == nullptr) return str;
-//     if (ptr == ptr->p->c0) return encodeString(ptr->p, "0" + str);
-//     if (ptr == ptr->p->c1) return encodeString(ptr->p, "1" + str);
-// }
 
 /* TODO */
 // byte HCTree::decode(BitInputStream& in) const { return ' '; }
 
 /* TODO
- * pass in each encoding bits, and decode into the corresponding symbol
+ * pass in the whole encoding string, using get() function to go through
+ * this string, once get one byte, then decode into a symbol by traverse the
+ * HCTree.
  */
 byte HCTree::decode(istream& in) const {
     HCNode* ptr = this->root;

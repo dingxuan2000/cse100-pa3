@@ -1,7 +1,11 @@
 /**
  * TODO: file header
  *
- * Author:
+ * Author:Xuan Ding, xding@ucsd.edu
+ *        Qilong Li, qil009@ucsd.edu
+ * this file encodes an input file and outputs to a encoded file. this file
+ *includes function psudocompress which takes parameter of two file names
+ *inputfile and outputfile. inputs orginal file and outputs encoded file.
  */
 #include <fstream>
 #include <iostream>
@@ -11,7 +15,10 @@
 #include "HCNode.hpp"
 #include "HCTree.hpp"
 /* TODO: add pseudo compression with ascii encoding and naive header
- * (checkpoint) */
+ * (checkpoint)
+ * psudocompress takes parameter of two file names inputfile and outputfile.
+ * inputs orginal file and outputs encoded file.
+ */
 void pseudoCompression(string inFileName, string outFileName) {
     // 1. scan the input file, to compute each ascii value's count into freqency
     // vector

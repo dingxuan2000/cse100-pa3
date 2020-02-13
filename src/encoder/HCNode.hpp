@@ -1,7 +1,10 @@
 /**
  * TODO: file header
  *
- * Author:
+ * Author:Xuan Ding, xding@ucsd.edu
+ *        Qilong Li, qil009@ucsd.edu
+ * HCNode class provides the HCNode struct, and a comparator for sorting the
+ * HCNode in the priority_queue, which can help for building the HCTree.
  */
 #ifndef HCNODE_HPP
 #define HCNODE_HPP
