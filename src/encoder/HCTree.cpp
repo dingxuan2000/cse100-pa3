@@ -80,17 +80,27 @@ void HCTree::encode(byte symbol, ostream& out) const {
         out << "0";
     else {
         HCNode* ptr = leaves.at(symbol);
-        // string en_string;
-        // en_string = encodeString(ptr, "");
-        out << encodeString(ptr, "");
+        string en_string = "";
+        while (ptr->p != nullptr) {
+            if (ptr == ptr->p->c0) {  // check if is 0 side
+                en_string = "0" + en_string;
+                ptr = ptr->p;
+
+            } else if (ptr == ptr->p->c1) {
+                en_string = "1" + en_string;
+                ptr = ptr->p;
+            }  // check if is 1 side
+        }
+
+        out << en_string;
     }
 }
-string HCTree::encodeString(HCNode* ptr, const string& str) const {
-    if (ptr == nullptr) return str;
-    if (ptr->p == nullptr) return str;
-    if (ptr == ptr->p->c0) return encodeString(ptr->p, "0" + str);
-    if (ptr == ptr->p->c1) return encodeString(ptr->p, "1" + str);
-}
+// string HCTree::encodeString(HCNode* ptr, const string& str) const {
+//     if (ptr == nullptr) return str;
+//     if (ptr->p == nullptr) return str;
+//     if (ptr == ptr->p->c0) return encodeString(ptr->p, "0" + str);
+//     if (ptr == ptr->p->c1) return encodeString(ptr->p, "1" + str);
+// }
 
 /* TODO */
 // byte HCTree::decode(BitInputStream& in) const { return ' '; }
