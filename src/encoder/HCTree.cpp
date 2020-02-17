@@ -74,7 +74,7 @@ void HCTree::build(const vector<unsigned int>& freqs) {
 }
 
 /* TODO */
-// void HCTree::encode(byte symbol, BitOutputStream& out) const {}
+void HCTree::encode(byte symbol, BitOutputStream& out) const {}
 
 /* TODO
  * byte is unsigned char,

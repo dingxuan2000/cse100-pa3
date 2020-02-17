@@ -22,9 +22,18 @@ class BitOutputStream {
 
   public:
     /* TODO: add function header and implement */
-    explicit BitOutputStream(ostream& os, unsigned int bufSize) : out(os){};
+    explicit BitOutputStream(ostream& os, unsigned int bufSize)
+        : out(os), bufSize(bufSize), nbits(0) {
+        // initialize buffer with zero-filled.
+        for (int i = 0; i < bufSize; i++) {
+            buf[i] = 0;
+        }
+    };
 
-    /* TODO: add function header */
+    /* TODO: add function header
+     * Write the part of buffer that was written by the user to the output
+     * stream and then clear the buffer to allow further use.
+     */
     void flush();
 
     /* TODO: add function header */

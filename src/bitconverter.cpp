@@ -73,7 +73,8 @@ int main(int argc, char* argv[]) {
     const int OUT_IDX = 4;
 
     if (argc != NUM_ARG) return 1;
-    unsigned int bufSize = stoi(argv[BUF_IDX]);
+    unsigned int bufSize =
+        stoi(argv[BUF_IDX]);  // transfer string to unsigned int
     if (strcmp(argv[FLAG_IDX], "-b") == 0) {
         charToBit(argv[IN_IDX], argv[OUT_IDX], bufSize);
     } else if (strcmp(argv[FLAG_IDX], "-c") == 0) {
