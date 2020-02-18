@@ -68,7 +68,84 @@ void pseudoCompression(string inFileName, string outFileName) {
 }
 
 /* TODO: True compression with bitwise i/o and small header (final) */
-void trueCompression(string inFileName, string outFileName) {}
+void trueCompression(string inFileName, string outFileName) {
+    // 1. scan the input file, to compute each ascii value's count into freqency
+    // vector
+    HCTree* tree = new HCTree();
+    ifstream fin;
+    ofstream fout;
+    BitOutputStream out(fout, 4000);
+    byte c1;
+    // int num_row = 0;
+    vector<unsigned int> frequency(256);
+    fin.open(inFileName, ios::in);
+
+    while (!fin.eof() && fin.peek() != EOF) {
+        // c = fin.peek();
+        c1 = (byte)fin.get();
+        // cout << c << endl;
+        if (c1 == '\n') {
+            frequency[c1]++;
+            // continue;
+        } else {
+            // cout << c1 << endl;
+            frequency[c1]++;
+        }
+    }
+
+    fin.close();
+
+    // 2.当读取完第一遍file,将frequency vector存好后，call build()
+    tree->build(frequency);
+
+    //第一步，首先得到number of total encofing bits
+    fin.open(inFileName, ios::in);
+    fout.open(outFileName, ios::out | ios::binary);
+    unsigned int sum = 0;
+    while (!fin.eof() && fin.peek() != EOF) {
+        //每次得到一个symbol, pass in encodeSize() to get the total number of
+        // encoding bits
+        c1 = (byte)fin.get();
+        sum += tree->encodeSize(c1);
+        cout << sum << endl;
+    }
+    // call writeInt() to write integer to 32 bits into fout
+    out.WriteInt(sum);  // sum is the total number of encoding bits
+    fin.close();
+    fout.close();
+
+    //第二步, 用1表示不是leaf node,
+    //用0表示是leaf node fin.open(inFileName, ios::in);
+    // fin.open(inFileName, ios::in);
+    fout.open(outFileName, ios::out | ios::binary);
+    // while (!fin.eof() && fin.peek() != EOF) {
+    // call一个helper,得到每个char的对应的int(1or0)
+    //然后用writeBit()去将每个bit写进buffer里面，
+    //然后根据freq
+    // vector决定有多少个nodes,
+    // 然后再用nbits去将buffer里面的bits都传进fout里面
+    tree->num_node(tree->getRoot(), out);
+    //}
+    // fin.close();
+    fout.close();
+
+    //第三步,
+
+    //最后一步，call encode()
+    fin.open(inFileName, ios::in);
+
+    fout.open(outFileName, ios::out | ios::binary);
+
+    while (!fin.eof() && fin.peek() != EOF) {
+        // c = fin.peek();
+        c1 = (byte)fin.get();
+        // cout << c1 << endl;
+        tree->encode(c1, out);
+    }
+    out.flush();
+    fin.close();
+    fout.close();
+}
 
 /* TODO: Main program that runs the compress */
 int main(int argc, char* argv[]) {
@@ -103,8 +180,13 @@ int main(int argc, char* argv[]) {
         fout.close();
         return 0;
     }
-
     // call pseudoCompression() to implement encoding part
-    pseudoCompression(inFileName, outFileName);
+    if (isAsciiOutput == true) {
+        pseudoCompression(inFileName, outFileName);
+    } else {
+        // cout << "coming" << endl;
+        trueCompression(inFileName, outFileName);
+    }
+
     return 0;
 }

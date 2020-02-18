@@ -25,11 +25,15 @@ class BitInputStream {
 
     /* TODO: add function header */
     bool atEndOfFile();
-    byte BitInputStream::bitVal(byte b, unsigned int n);
+    byte bitVal(byte b, unsigned int n);
 
   public:
     /* TODO: add function header and implement */
-    explicit BitInputStream(istream& is, unsigned int bufSize) : in(is){};
+    explicit BitInputStream(istream& is, unsigned int bufSize)
+        : in(is), bufSize(bufSize), nbits(0), eofBit(false), numBytesRead(1) {
+        buf = new char[bufSize - 1];
+        this->fill();
+    };
 
     /* TODO: add function header
      * To zero-fill the buffer(char array)

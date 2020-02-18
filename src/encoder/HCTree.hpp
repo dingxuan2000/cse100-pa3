@@ -30,8 +30,13 @@ class HCTree {
     void deleteAll(HCNode* n);
 
   public:
+    unsigned int encodeSize(unsigned char symbol);
+    void num_node(HCNode* node, BitOutputStream& out);
+    void num_node2(HCNode* ptr, BitOutputStream& out);
+    HCNode* getRoot();
     /* TODO: add function header and implement
      * Initialized a HCTree with root = 0
+     * initialize the leaves vector's element as nullptr
      */
     HCTree() : root(0) {}
 

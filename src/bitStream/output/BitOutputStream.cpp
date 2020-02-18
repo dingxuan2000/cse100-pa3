@@ -12,7 +12,7 @@ void BitOutputStream::flush() {
     if (nbits == 0) return;
     //应该改成unsigned int byte_written = nbits/8+1;
     unsigned int byte_written =
-        nbits / 8 + 1;  // determine how many bytes are in the buffer
+        (nbits - 1) / 8 + 1;  // determine how many bytes are in the buffer
 
     out.write(buf, byte_written);  // write byte written into outstream.
 
@@ -25,11 +25,12 @@ void BitOutputStream::flush() {
 
 /* TODO */
 void BitOutputStream::writeBit(unsigned int i) {
-    if (nbits == bufSize * 8 - 1) {  // flush the buffer is it is full
+    if (nbits == bufSize * 8) {  // flush the buffer is it is full
         this->flush();
     }
     unsigned int byte_size = 8;  // size of byte
     unsigned int index = nbits / 8;
+    // cout<<index<<endl;
     // current index
     unsigned int left_digit = nbits % byte_size + 1;
 
@@ -42,5 +43,26 @@ void BitOutputStream::writeBit(unsigned int i) {
         nbits++;  // increment bit count
     } else {
         nbits++;  // increment bit count , zero stays in place
+    }
+}
+
+byte BitOutputStream::bitVal(byte b, unsigned int n) {
+    //为什么是7-n
+    return (b >> (7 - n)) & 1;
+}
+void BitOutputStream::writeByte(byte b) {
+    for (int i = 0; i < 8; i++) {
+        unsigned int bit = (int)bitVal(b, i);
+        writeBit(bit);
+    }
+}
+
+byte BitOutputStream::IntbitVal(byte b, unsigned int n) {
+    return (b >> (31 - n)) & 1;
+}
+void BitOutputStream::WriteInt(unsigned int b) {
+    for (int i = 0; i < 32; i++) {
+        unsigned int bit = (int)IntbitVal(b, i);
+        writeBit(bit);
     }
 }
