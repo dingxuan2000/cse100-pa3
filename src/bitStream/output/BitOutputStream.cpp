@@ -66,3 +66,4 @@ void BitOutputStream::WriteInt(unsigned int b) {
         writeBit(bit);
     }
 }
+void BitOutputStream::deleteBuffer() { delete[] buf; }

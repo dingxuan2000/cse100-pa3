@@ -32,6 +32,7 @@ class BitInputStream {
     unsigned int numBits;
     unsigned int readInt();
     byte readByte();
+    void deleteBuffer();
     /* TODO: add function header and implement */
     explicit BitInputStream(istream& is, unsigned int bufSize)
         : in(is), bufSize(bufSize), nbits(0), eofBit(false), numBytesRead(1) {

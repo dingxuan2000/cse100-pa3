@@ -26,6 +26,7 @@ class BitOutputStream {
   public:
     void writeByte(byte b);
     void WriteInt(unsigned int b);
+    void deleteBuffer();
     /* TODO: add function header and implement */
     explicit BitOutputStream(ostream& os, unsigned int bufSize)
         : out(os), bufSize(bufSize), nbits(0) {

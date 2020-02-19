@@ -85,6 +85,7 @@ void trueDecompression(string inFileName, string outFileName) {
     fin.close();
     fout.close();
     delete tree;
+    in.deleteBuffer();
 }
 
 /* TODO: Main program that runs the uncompress */

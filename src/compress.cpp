@@ -140,6 +140,7 @@ void trueCompression(string inFileName, string outFileName) {
     fin.close();
     fout.close();
     delete tree;
+    out.deleteBuffer();
 }
 
 /* TODO: Main program that runs the compress */

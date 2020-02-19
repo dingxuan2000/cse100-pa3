@@ -68,3 +68,4 @@ byte BitInputStream::readByte() {
     }
     return temp;
 }
+void BitInputStream::deleteBuffer() { delete[] buf; }
