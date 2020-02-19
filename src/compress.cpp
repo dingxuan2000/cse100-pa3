@@ -107,7 +107,7 @@ void trueCompression(string inFileName, string outFileName) {
         // encoding bits
         c1 = (byte)fin.get();
         sum = sum + tree->encodeSize(c1);
-        cout << sum << endl;
+        // cout << sum << endl;
     }
     // call writeInt() to write integer to 32 bits into fout
     out.WriteInt(sum);  // sum is the total number of encoding bits
@@ -139,6 +139,7 @@ void trueCompression(string inFileName, string outFileName) {
     out.flush();
     fin.close();
     fout.close();
+    delete tree;
 }
 
 /* TODO: Main program that runs the compress */

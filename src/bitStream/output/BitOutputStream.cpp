@@ -57,7 +57,7 @@ void BitOutputStream::writeByte(byte b) {
     }
 }
 
-byte BitOutputStream::IntbitVal(byte b, unsigned int n) {
+byte BitOutputStream::IntbitVal(unsigned int b, unsigned int n) {
     return (b >> (31 - n)) & 1;
 }
 void BitOutputStream::WriteInt(unsigned int b) {

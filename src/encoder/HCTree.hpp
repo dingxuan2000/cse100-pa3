@@ -31,10 +31,10 @@ class HCTree {
     HCNode* findSymbol(vector<HCNode*>& leaves, byte symbl);
 
   public:
-        unsigned int encodeSize(byte symbol);
+    unsigned int encodeSize(byte symbol);
     void num_node(HCNode* node, BitOutputStream& out);
     HCNode* rebuild(BitInputStream& in);
-    // void node_path(HCNode* ptr, BitOutputStream& out);
+    void setRoot(HCNode* roots);
     HCNode* getRoot();
     /* TODO: add function header and implement
      * Initialized a HCTree with root = 0

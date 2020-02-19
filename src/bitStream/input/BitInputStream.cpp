@@ -47,7 +47,7 @@ unsigned int BitInputStream::readInt() {
     string int_str = "";
     for (int i = 0; i < 32; i++) {
         int_str = int_str + to_string(this->readBit());
-        cout << this->readBit() << endl;
+        // cout << this->readBit() << endl;
     }
     // convert string to unsigned int
     unsigned int x = stoi(int_str, 0, 2);

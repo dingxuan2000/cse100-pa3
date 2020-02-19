@@ -220,26 +220,8 @@ void HCTree::num_node(HCNode* ptr, BitOutputStream& out) {
     }
 }
 HCNode* HCTree::getRoot() { return this->root; }
-// void HCTree::node_path(HCNode* ptr, BitOutputStream& out) {
-//     if (ptr == nullptr) return;
-//     //需要root的信息吗？我觉得没有必要，在reconstruct
-//     tree的时候，这个无关紧要 if (ptr == this->root) {
-//         out.writeBit(0);
-//         out.writeByte(ptr->symbol);
-//     }
+void HCTree::setRoot(HCNode* roots) { root = roots; }
 
-//     if (ptr->p != nullptr && ptr->p->c0 == ptr) {
-//         out.writeBit(0);
-//     }
-//     if (ptr->p != nullptr && ptr->p->c1 == ptr) {
-//         out.writeBit(1);
-//     }
-//     if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
-//         out.writeByte(ptr->symbol);
-//     }
-//     node_path(ptr->c0, out);
-//     node_path(ptr->c1, out);
-// }
 HCNode* HCTree::rebuild(BitInputStream& in) {
     if (in.readBit() == 0) {
         byte symbol = in.readByte();

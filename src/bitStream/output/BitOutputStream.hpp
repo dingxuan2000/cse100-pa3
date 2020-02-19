@@ -21,7 +21,7 @@ class BitOutputStream {
     unsigned int nbits;    // number of bits have been writen to buf
 
     byte bitVal(byte b, unsigned int n);
-    byte IntbitVal(byte b, unsigned int n);
+    byte IntbitVal(unsigned int b, unsigned int n);
 
   public:
     void writeByte(byte b);

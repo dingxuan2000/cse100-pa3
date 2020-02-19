@@ -67,23 +67,24 @@ void trueDecompression(string inFileName, string outFileName) {
     ofstream fout;
     byte c1;
     HCTree* tree = new HCTree();
-    fin.open(inFileName, ios::in);
+    fin.open(inFileName, ios::in | ios::binary);
     fout.open(outFileName, ios::out);
     BitInputStream in(fin, 4000);
-    unsigned int totalBits = in.readInt();
+    int totalBits = (int)in.readInt();
 
     // cout << totalBits << endl;
-    // in.numBits = totalBits;
+    in.numBits = totalBits;
     // 1.reconstruct the tree
-    // tree->rebuild(in);
-    // // 3.decode the input file
-    // while (in.numBits > 0) {
-    //     cout << in.numBits << endl;
-    //     c1 = tree->decode(in);
-    //     fout << c1;
-    // }
+    tree->setRoot(tree->rebuild(in));
+    // 3.decode the input file
+    while (in.numBits > 0) {
+        // cout << in.numBits << endl;
+        c1 = tree->decode(in);
+        fout << c1;
+    }
     fin.close();
     fout.close();
+    delete tree;
 }
 
 /* TODO: Main program that runs the uncompress */
