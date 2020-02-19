@@ -75,20 +75,22 @@ void HCTree::build(const vector<unsigned int>& freqs) {
 // return the length of each symbol's encoding
 // bits,便于我们计算一共需要多少的bits 这是放在header
 // file的第一个信息（32个bit),
-unsigned int HCTree::encodeSize(unsigned char symbol) {
+unsigned int HCTree::encodeSize(byte symbol) {
     // pass a symbol in, traverse the tree根据leaves vector, 然后return the
     // string length
-    HCNode* ptr = this->root;
-    // 1. if there is only one node in the tree, the size of the encoding length
-    // is 0??
-    // 2. if the node has no parent, the size of encoding lenght is 0
-    // 3.if the node
-    string s = "";
-    while (ptr->c0 != nullptr && ptr->c1 != nullptr) {
-        if (ptr == ptr->p->c0) s = s + "0";
-        if (ptr == ptr->p->c1) s = s + "1";
+    HCNode* ptr;
+    ptr = findSymbol(leaves, symbol);
+    if (ptr == this->root) return 1;
+    unsigned int count = 0;
+    while (ptr->p != nullptr) {
+        count++;
+        ptr = ptr->p;
     }
-    return s.length();
+    return count;
+}
+HCNode* HCTree::findSymbol(vector<HCNode*>& leaves, byte symbol) {
+    //根据symbol和leaves vector找到HCNode, then return
+    return leaves.at((unsigned int)symbol);
 }
 
 /* TODO */
@@ -97,18 +99,25 @@ void HCTree::encode(byte symbol, BitOutputStream& out) const {
         out.writeBit(0);
     else {
         HCNode* ptr = leaves.at(symbol);
-        // string en_string = "";
+        string en_string = "";
         while (ptr->p != nullptr) {
             if (ptr == ptr->p->c0) {  // check if is 0 side
-                // en_string = "0" + en_string;
-                out.writeBit(0);
+                en_string = "0" + en_string;
+                //这里writeBit是反着的进去的，因为是从下往上track
+                // out.writeBit(0);
                 ptr = ptr->p;
 
             } else if (ptr == ptr->p->c1) {
-                out.writeBit(1);
-                // en_string = "1" + en_string;
+                // out.writeBit(1);
+                en_string = "1" + en_string;
                 ptr = ptr->p;
             }  // check if is 1 side
+        }
+        for (int i = 0; i < en_string.size(); i++) {
+            if (en_string.at(i) == '1')
+                out.writeBit(1);
+            else
+                out.writeBit(0);
         }
     }
 }
@@ -150,14 +159,19 @@ byte HCTree::decode(BitInputStream& in) const {
     if (ptr == nullptr) return 0;
     // if only one node in the tree, just return the root's symbol
     if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
+        in.numBits--;
         return ptr->symbol;
-        // return ptr->symbol;
     } else {
         while (!in.eof()) {
             c = in.readBit();
-            // if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
-            if (c == 1) ptr = ptr->c1;
-            if (c == 0) ptr = ptr->c0;
+            if (c == 1) {
+                ptr = ptr->c1;
+                in.numBits--;
+            }
+            if (c == 0) {
+                ptr = ptr->c0;
+                in.numBits--;
+            }
             // when reached leaf node
             if (ptr->c0 == nullptr && ptr->c1 == nullptr) return ptr->symbol;
         }
@@ -193,9 +207,12 @@ void HCTree::deleteAll(HCNode* n) {
     deleteAll(n->c1);
     delete n;
 }
+//得到每个char的对应的int(1or0)
+//然后用writeBit()去将每个bit写进buffer里面，
 void HCTree::num_node(HCNode* ptr, BitOutputStream& out) {
-    if (ptr == nullptr) {
+    if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
         out.writeBit(0);
+        out.writeByte(ptr->symbol);
     } else {
         out.writeBit(1);
         num_node(ptr->c0, out);
@@ -203,17 +220,34 @@ void HCTree::num_node(HCNode* ptr, BitOutputStream& out) {
     }
 }
 HCNode* HCTree::getRoot() { return this->root; }
-void HCTree::num_node2(HCNode* ptr, BitOutputStream& out) {
-    if (ptr == this->root) out.writeBit(0);
-    if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
-        out.writeByte(ptr->symbol);
+// void HCTree::node_path(HCNode* ptr, BitOutputStream& out) {
+//     if (ptr == nullptr) return;
+//     //需要root的信息吗？我觉得没有必要，在reconstruct
+//     tree的时候，这个无关紧要 if (ptr == this->root) {
+//         out.writeBit(0);
+//         out.writeByte(ptr->symbol);
+//     }
+
+//     if (ptr->p != nullptr && ptr->p->c0 == ptr) {
+//         out.writeBit(0);
+//     }
+//     if (ptr->p != nullptr && ptr->p->c1 == ptr) {
+//         out.writeBit(1);
+//     }
+//     if (ptr->c0 == nullptr && ptr->c1 == nullptr) {
+//         out.writeByte(ptr->symbol);
+//     }
+//     node_path(ptr->c0, out);
+//     node_path(ptr->c1, out);
+// }
+HCNode* HCTree::rebuild(BitInputStream& in) {
+    if (in.readBit() == 0) {
+        byte symbol = in.readByte();
+        HCNode* newNode = new HCNode(0, symbol, 0, 0);
+        return newNode;
+    } else {
+        HCNode* newNode = new HCNode(0, 0, 0, 0);
+        newNode->c0 = rebuild(in);
+        newNode->c1 = rebuild(in);
     }
-    if (ptr->p != nullptr && ptr->p->c0 == ptr) {
-        out.writeBit(0);
-    }
-    if (ptr->p != nullptr && ptr->p->c1 == ptr) {
-        out.writeBit(1);
-    }
-    num_node2(ptr->c0, out);
-    num_node2(ptr->c1, out);
 }

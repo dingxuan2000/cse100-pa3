@@ -60,7 +60,31 @@ void pseudoDecompression(string inFileName, string outFileName) {
 }
 
 /* TODO: True decompression with bitwise i/o and small header (final) */
-void trueDecompression(string inFileName, string outFileName) {}
+void trueDecompression(string inFileName, string outFileName) {
+    // 1.store the total number of encoding bits when read the first 32 bits of
+    // the input file
+    ifstream fin;
+    ofstream fout;
+    byte c1;
+    HCTree* tree = new HCTree();
+    fin.open(inFileName, ios::in);
+    fout.open(outFileName, ios::out);
+    BitInputStream in(fin, 4000);
+    unsigned int totalBits = in.readInt();
+
+    // cout << totalBits << endl;
+    // in.numBits = totalBits;
+    // 1.reconstruct the tree
+    // tree->rebuild(in);
+    // // 3.decode the input file
+    // while (in.numBits > 0) {
+    //     cout << in.numBits << endl;
+    //     c1 = tree->decode(in);
+    //     fout << c1;
+    // }
+    fin.close();
+    fout.close();
+}
 
 /* TODO: Main program that runs the uncompress */
 int main(int argc, char* argv[]) {
@@ -97,7 +121,11 @@ int main(int argc, char* argv[]) {
     }
 
     // call pseudoCompression() to implement encoding part
-    pseudoDecompression(inFileName, outFileName);
+    if (isAsciiOutput == true) {
+        pseudoDecompression(inFileName, outFileName);
+    } else {
+        trueDecompression(inFileName, outFileName);
+    }
 
     return 0;
 }

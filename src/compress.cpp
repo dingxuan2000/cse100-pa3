@@ -106,7 +106,7 @@ void trueCompression(string inFileName, string outFileName) {
         //每次得到一个symbol, pass in encodeSize() to get the total number of
         // encoding bits
         c1 = (byte)fin.get();
-        sum += tree->encodeSize(c1);
+        sum = sum + tree->encodeSize(c1);
         cout << sum << endl;
     }
     // call writeInt() to write integer to 32 bits into fout
@@ -116,24 +116,18 @@ void trueCompression(string inFileName, string outFileName) {
 
     //第二步, 用1表示不是leaf node,
     //用0表示是leaf node fin.open(inFileName, ios::in);
-    // fin.open(inFileName, ios::in);
-    fout.open(outFileName, ios::out | ios::binary);
-    // while (!fin.eof() && fin.peek() != EOF) {
-    // call一个helper,得到每个char的对应的int(1or0)
-    //然后用writeBit()去将每个bit写进buffer里面，
-    //然后根据freq
-    // vector决定有多少个nodes,
-    // 然后再用nbits去将buffer里面的bits都传进fout里面
+    fout.open(outFileName, ios::out | ios::binary | ios::app);
+    // call一个helper
     tree->num_node(tree->getRoot(), out);
-    //}
-    // fin.close();
     fout.close();
 
-    //第三步,
+    //第三步,先存encoding bits,再存symbol,以pre-order去traverse the tree
+    // fout.open(outFileName, ios::out | ios::binary | ios::app);
+    // tree->node_path(tree->getRoot(), out);
+    // fout.close();
 
     //最后一步，call encode()
     fin.open(inFileName, ios::in);
-
     fout.open(outFileName, ios::out | ios::binary);
 
     while (!fin.eof() && fin.peek() != EOF) {

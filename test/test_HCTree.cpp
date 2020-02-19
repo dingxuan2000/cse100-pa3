@@ -76,3 +76,6 @@ TEST_F(SimpleHCTreeFixture, TEST_DECODE) {
     istringstream is3("1111");
     ASSERT_EQ(tree.decode(is3), 'k');
 }
+// TEST_F(SimpleHCTreeFixture, TEST_EncodeSize){
+
+// }

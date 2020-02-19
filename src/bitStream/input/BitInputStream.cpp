@@ -43,3 +43,28 @@ byte BitInputStream::bitVal(byte b, unsigned int n) {
     //威为什么是8-n
     return (b >> (8 - n)) & 1;
 }
+unsigned int BitInputStream::readInt() {
+    string int_str = "";
+    for (int i = 0; i < 32; i++) {
+        int_str = int_str + to_string(this->readBit());
+        cout << this->readBit() << endl;
+    }
+    // convert string to unsigned int
+    unsigned int x = stoi(int_str, 0, 2);
+    return x;
+}
+void BitInputStream::setbit(byte& b, int n, int i) {
+    // sets one bit at bit index n.
+    if (i == 1) {
+        b = b | (1 << (7 - n));
+    }
+}
+byte BitInputStream::readByte() {
+    byte temp = 0;
+    int bit;
+    for (int i = 0; i < 8; i++) {
+        bit = this->readBit();
+        setbit(temp, i, bit);
+    }
+    return temp;
+}

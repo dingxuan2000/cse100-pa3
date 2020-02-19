@@ -28,11 +28,13 @@ class HCTree {
     vector<HCNode*> leaves;  // a vector storing pointers to all leaf HCNodes
     typedef priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
     void deleteAll(HCNode* n);
+    HCNode* findSymbol(vector<HCNode*>& leaves, byte symbl);
 
   public:
-    unsigned int encodeSize(unsigned char symbol);
+        unsigned int encodeSize(byte symbol);
     void num_node(HCNode* node, BitOutputStream& out);
-    void num_node2(HCNode* ptr, BitOutputStream& out);
+    HCNode* rebuild(BitInputStream& in);
+    // void node_path(HCNode* ptr, BitOutputStream& out);
     HCNode* getRoot();
     /* TODO: add function header and implement
      * Initialized a HCTree with root = 0

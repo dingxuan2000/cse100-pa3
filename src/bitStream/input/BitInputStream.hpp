@@ -26,8 +26,12 @@ class BitInputStream {
     /* TODO: add function header */
     bool atEndOfFile();
     byte bitVal(byte b, unsigned int n);
+    void setbit(byte& b, int n, int i);
 
   public:
+    unsigned int numBits;
+    unsigned int readInt();
+    byte readByte();
     /* TODO: add function header and implement */
     explicit BitInputStream(istream& is, unsigned int bufSize)
         : in(is), bufSize(bufSize), nbits(0), eofBit(false), numBytesRead(1) {
