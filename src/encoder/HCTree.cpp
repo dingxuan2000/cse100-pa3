@@ -231,5 +231,6 @@ HCNode* HCTree::rebuild(BitInputStream& in) {
         HCNode* newNode = new HCNode(0, 0, 0, 0);
         newNode->c0 = rebuild(in);
         newNode->c1 = rebuild(in);
+        return newNode;
     }
 }
